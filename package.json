@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "@streampot/client": "^0.0.18",
+    "assemblyai": "^4.6.1",
     "dotenv": "^16.4.5"
   }
 }
