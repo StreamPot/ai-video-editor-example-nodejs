@@ -53,13 +53,25 @@ function matchTimestampByText(clipText, allTimestamps) {
     return null;
 }
 
+async function makeClip(videoUrl, timestamps) {
+    const job = await streampot.input(videoUrl)
+        .setStartTime(timestamps.start)
+        .setDuration(timestamps.end - timestamps.start)
+        .output('clip.mp4')
+        .runAndWait();
+
+    return job.outputs['clip.mp4']
+}
+
 async function main() {
     const EXAMPLE_VID = 'https://github.com/jackbridger/streampot-ai-video-example/raw/main/example.webm'
-    const audioUrl = await extractAudio(EXAMPLE_VID);
+
+    const audioUrl = await extractAudio(EXAMPLE_VID)
     const transcript = await getTranscript(audioUrl);
+
     const highlightText = await getHighlightText(transcript);
     const highlightTimestamps = matchTimestampByText(highlightText, transcript.words);
 
-    console.log(highlightTimestamps)
+    console.log(await makeClip(EXAMPLE_VID, highlightTimestamps))
 }
 main()
